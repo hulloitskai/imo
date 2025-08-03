@@ -1,0 +1,16 @@
+.modalContent {
+  > div > div {
+    min-width: 0px;
+  }
+}
+
+.modalHeader {
+  padding-bottom: var(--mantine-spacing-xs);
+}
+
+.modalViewport {
+  > div {
+    width: 100%;
+    table-layout: fixed;
+  }
+}

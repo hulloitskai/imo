@@ -1,0 +1,26 @@
+{
+  "all": {
+    "sourceCodeDir": "app",
+    "additionalEntrypoints": [
+      "~/assets/**/*",
+      "~/pages/*.tsx",
+      "~/emails/*.tsx"
+    ],
+    "ssrBuildEnabled": true,
+    "ssrEntrypoint": "~/ssr/application.{js,jsx,ts,tsx}",
+    "ssrOutputDir": "dist/ssr"
+  },
+  "development": {
+    "publicOutputDir": "dist-dev",
+    "port": 3036,
+    "autoBuild": true
+  },
+  "test": {
+    "publicOutputDir": "dist-test",
+    "port": 3037,
+    "autoBuild": true
+  },
+  "production": {
+    "publicOutputDir": "dist"
+  }
+}

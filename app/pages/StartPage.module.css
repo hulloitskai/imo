@@ -1,0 +1,27 @@
+.message {
+  max-width: 440px;
+  padding: 8px var(--mantine-spacing-xs);
+  border-radius: var(--mantine-radius-default);
+
+  &[data-role="user"] {
+    align-self: flex-end;
+    text-align: end;
+    margin-left: var(--mantine-spacing-xl);
+    background-color: var(--mantine-color-blue-light);
+  }
+
+  &[data-role="assistant"] {
+    align-self: flex-start;
+    margin-right: var(--mantine-spacing-xl);
+    background-color: var(--mantine-color-gray-light);
+  }
+}
+
+.valuesChoice {
+  padding: var(--mantine-spacing-md);
+  max-width: 320px;
+
+  @mixin hover {
+    border-color: var(--mantine-color-primary-outline);
+  }
+}

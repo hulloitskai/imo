@@ -1,0 +1,47 @@
+.header {
+  pointer-events: none;
+  background-color: transparent;
+
+  &::before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    content: "";
+    backdrop-filter: blur(4px);
+    background-image: linear-gradient(
+      to top,
+      transparent,
+      alpha(var(--mantine-color-body), 0.8)
+    );
+    mask: linear-gradient(to top, transparent, black rem(24px));
+  }
+
+  [data-radix-focus-guard] + :global(#app) &::before {
+    visibility: hidden;
+  }
+}
+
+.clickable {
+  pointer-events: auto;
+}
+
+.logoButton {
+  border-radius: var(--mantine-radius-xl);
+  pointer-events: auto;
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+
+  :global(.mantine-Button-label) {
+    font-weight: 900;
+    font-size: var(--mantine-font-size-lg);
+    font-style: oblique;
+    padding-inline: 2px;
+  }
+}
+
+.menu {
+  pointer-events: auto;
+  flex-shrink: 0;
+}

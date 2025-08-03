@@ -1,0 +1,373 @@
+@layer mantine, components;
+
+@layer components {
+  .button {
+    &:where(
+        :disabled:not([data-loading]),
+        [data-disabled]:not([data-loading])
+      ) {
+      @mixin dark-user-theme {
+        color: var(--mantine-color-dark-2);
+        background-color: alpha(var(--mantine-color-black), 0.4);
+      }
+
+      [data-mantine-color-scheme="dark"]:not([data-user-theme]) .card & {
+        background-color: var(--mantine-color-dark-7);
+      }
+    }
+  }
+
+  .buttonLabel {
+    font-family: var(--mantine-font-family-headings);
+    font-weight: var(--button-fw);
+  }
+
+  .focus {
+    outline-width: 1px;
+  }
+
+  .input {
+    font-size: var(--mantine-font-size-md);
+
+    @mixin dark {
+      --input-bg: transparent;
+    }
+
+    @mixin dark-user-theme {
+      border-color: alpha(var(--mantine-color-white), 0.2);
+    }
+  }
+
+  .inputLabel {
+    font-family: var(--mantine-font-family-headings);
+  }
+
+  .modalHeader {
+    min-height: 0px;
+    align-items: start;
+    padding-bottom: 6px;
+
+    /* Enforce minimum lightness of 75% for light user themes */
+    @mixin light-user-theme {
+      --min-lightness: 75;
+
+      background-color: hsl(
+        from var(--mantine-color-body) h s clamp(var(--min-lightness), l, 100)
+      );
+
+      /* Use @supports to add in support for old syntax that requires % units to
+          be specified in lightness calculations. This is required for
+          Safari >= 16.4+ and < 18.0 */
+      @supports (color: hsl(from red h s calc(l - 20%))) {
+        background-color: hsl(
+          from var(--mantine-color-body) h s
+            clamp(calc(var(--min-lightness) * 1%), l, 100%)
+        );
+      }
+    }
+
+    :not([data-disable-auto-fullscreen]) & {
+      @mixin smaller-than $mantine-breakpoint-xs {
+        padding-top: calc(
+          var(--mantine-spacing-sm) + var(--safe-area-inset-top, 0px)
+        );
+      }
+
+      @mixin larger-than $mantine-breakpoint-xs {
+        padding-top: var(--mantine-spacing-sm);
+      }
+    }
+  }
+
+  .modalInner {
+    :not([data-disable-auto-fullscreen]) & {
+      @mixin smaller-than $mantine-breakpoint-xs {
+        --modal-inner-y-offset: 0px;
+        --modal-inner-x-offset: 0px;
+      }
+    }
+  }
+
+  .modalContent {
+    /* Enforce minimum lightness of 75% for light user themes */
+    @mixin light-user-theme {
+      --min-lightness: 75;
+
+      background-color: hsl(
+        from var(--mantine-color-body) h s clamp(var(--min-lightness), l, 100)
+      );
+
+      /* Use @supports to add in support for old syntax that requires % units to
+      be specified in lightness calculations. This is required for
+      Safari >= 16.4+ and < 18.0 */
+      @supports (color: hsl(from red h s calc(l - 20%))) {
+        background-color: hsl(
+          from var(--mantine-color-body) h s
+            clamp(calc(var(--min-lightness) * 1%), l, 100%)
+        );
+      }
+    }
+
+    :not([data-disable-auto-fullscreen]) & {
+      @mixin smaller-than $mantine-breakpoint-xs {
+        --modal-content-flex: 0 0 100%;
+        --modal-content-max-height: auto;
+        --modal-content-height: 100dvh;
+
+        border-radius: 0px;
+      }
+    }
+  }
+
+  .badge {
+    &[data-variant="default"] {
+      @mixin dark-user-theme {
+        background-color: var(--mantine-color-body);
+        border-color: alpha(var(--mantine-color-white), 0.2);
+      }
+    }
+  }
+
+  .badgeLabel {
+    text-transform: none;
+    font-family: var(--mantine-font-family-headings);
+  }
+
+  .card {
+    @mixin dark {
+      background-color: var(--mantine-color-dark-8);
+      border-color: var(--mantine-color-dark-6);
+    }
+
+    @mixin dark-user-theme {
+      background-color: alpha(var(--mantine-color-black), 0.4);
+      border-color: alpha(var(--mantine-color-white), 0.2);
+
+      &::before {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        content: "";
+        backdrop-filter: blur(rem(8px));
+      }
+    }
+
+    .card & {
+      @mixin dark-user-theme {
+        background-color: transparent;
+
+        &::before {
+          content: none;
+        }
+      }
+    }
+  }
+
+  .cardSection {
+    &[data-with-border] {
+      @mixin dark {
+        border-color: var(--mantine-color-dark-6);
+      }
+
+      @mixin dark-user-theme {
+        &:not(:global(.mantine-Paper-root .cardSection)) {
+          border-color: alpha(var(--mantine-color-white), 0.2);
+        }
+      }
+    }
+  }
+
+  .dropdown {
+    @mixin dark {
+      background-color: var(--mantine-color-dark-8);
+    }
+
+    @mixin dark-user-theme {
+      background-color: alpha(var(--mantine-color-black), 0.4);
+      border-color: alpha(var(--mantine-color-white), 0.2);
+      backdrop-filter: blur(rem(8px));
+    }
+  }
+
+  .navLink {
+    font-family: var(--mantine-font-family-headings);
+    font-weight: 500;
+    background-color: transparent;
+
+    @mixin hover {
+      background-color: transparent;
+    }
+  }
+
+  .alertBody {
+    row-gap: 0px;
+  }
+
+  .alertTitle {
+    font-family: var(--mantine-font-family-headings);
+  }
+
+  .text {
+    &:not([data-inherit]):not([data-inline]) {
+      line-height: var(--mantine-line-height);
+    }
+  }
+
+  .title {
+    line-height: var(--mantine-line-height);
+  }
+
+  .drawerHeader {
+    padding-bottom: 6px;
+  }
+
+  .typographyStylesProvider {
+    word-break: break-word;
+    line-height: var(--mantine-line-height-xs);
+
+    a {
+      font-weight: 500;
+    }
+
+    p {
+      &:empty {
+        height: 8px;
+      }
+    }
+
+    :where(p) {
+      &:not(:last-child) {
+        margin-bottom: var(--mantine-spacing-xs);
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    :where(ul, ol):not([data-type="taskList"]) {
+      margin-block: var(--mantine-spacing-xs);
+      :where(li) {
+        margin-bottom: 4px;
+      }
+    }
+
+    :where(hr) {
+      @mixin dark-user-theme {
+        border-color: alpha(var(--mantine-color-white), 0.2);
+      }
+    }
+  }
+
+  .divider {
+    @mixin dark {
+      --divider-color: var(--mantine-color-dark-6);
+    }
+
+    @mixin dark-user-theme {
+      --divider-color: alpha(var(--mantine-color-white), 0.2);
+    }
+  }
+
+  .menuDivider {
+    @mixin dark-user-theme {
+      border-color: alpha(var(--mantine-color-white), 0.2);
+    }
+  }
+
+  .menuDropdown {
+    @mixin dark {
+      background-color: var(--mantine-color-dark-8);
+    }
+
+    @mixin dark-user-theme {
+      background-color: var(--mantine-color-body);
+      border-color: alpha(var(--mantine-color-white), 0.2);
+    }
+  }
+
+  .menuArrow {
+    @mixin dark-user-theme {
+      border-color: alpha(var(--mantine-color-white), 0.2);
+    }
+  }
+
+  .dividerLabel {
+    font-family: var(--mantine-font-family-headings);
+    font-weight: 500;
+  }
+
+  .menuItem {
+    &:not(:disabled) {
+      @mixin hover {
+        background-color: var(--mantine-primary-color-light);
+      }
+    }
+  }
+
+  .menuItemSection {
+    color: var(--mantine-color-primary-text);
+    width: 16px;
+    height: 16px;
+  }
+
+  .menuItemLabel {
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
+    font-weight: 500;
+    font-family: var(--mantine-font-family-headings);
+  }
+
+  .popoverDropdown:not(.menuDropdown) {
+    @mixin dark {
+      --popover-border-color: var(--mantine-color-dark-6);
+      background-color: var(--mantine-color-dark-8);
+    }
+
+    @mixin dark-user-theme {
+      --popover-border-color: alpha(var(--mantine-color-white), 0.2);
+      background-color: var(--mantine-color-body);
+      backdrop-filter: blur(rem(8px));
+    }
+  }
+
+  .richTextEditorContent {
+    @mixin light {
+      background-color: var(--mantine-color-white);
+    }
+  }
+
+  .richTextEditorControl {
+    &[data-active] {
+      background-color: var(--mantine-primary-color-filled);
+      color: var(--mantine-color-white);
+
+      @mixin hover {
+        background-color: var(--mantine-primary-color-filled-hover);
+      }
+    }
+  }
+
+  .skeleton {
+    &:where([data-visible])::after {
+      @mixin where-dark-user-theme {
+        background-color: alpha(var(--mantine-color-white), 0.2);
+      }
+    }
+  }
+
+  .closeButton {
+    @mixin where-dark-user-theme {
+      @mixin hover {
+        background-color: alpha(var(--mantine-color-black), 0.2);
+      }
+    }
+  }
+
+  .checkbox {
+    @mixin dark-user-theme {
+      &:not([data-checked]) :global(.mantine-Checkbox-input) {
+        background-color: transparent;
+        border-color: alpha(var(--mantine-color-white), 0.2);
+      }
+    }
+  }
+}

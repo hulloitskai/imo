@@ -1,0 +1,57 @@
+.menu {
+  :global(.mantine-Menu-dropdown) {
+    pointer-events: auto;
+    box-shadow: var(--mantine-shadow-md);
+
+    .target:not([data-expanded]) + & {
+      pointer-events: none;
+    }
+  }
+}
+
+.target {
+  font-weight: 600;
+  cursor: pointer;
+  padding-left: 8px;
+  text-transform: none;
+
+  &[data-expanded] {
+    border-color: var(--mantine-color-primary-filled);
+  }
+
+  @mixin dark-user-theme {
+    background-color: alpha(var(--mantine-color-black), 0.4);
+    backdrop-filter: blur(rem(8px));
+
+    &:not([data-expanded]) {
+      border-color: alpha(var(--mantine-color-white), 0.2);
+    }
+  }
+}
+
+.icon {
+  --icon-color: var(--badge-color, var(--mantine-color-white));
+
+  height: 20px;
+  width: 20px;
+  svg {
+    path,
+    g {
+      fill: var(--icon-color) !important;
+      stroke: var(--icon-color) !important;
+    }
+  }
+}
+
+.serverInfoItem {
+  padding-block: 4px;
+  background-color: transparent;
+  cursor: default;
+  font-size: var(--mantine-font-size-xs);
+  text-align: center;
+  opacity: 1;
+
+  :global(.mantine-Menu-itemLabel) {
+    color: var(--mantine-color-dimmed);
+  }
+}

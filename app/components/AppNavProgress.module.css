@@ -1,0 +1,17 @@
+.progress {
+  position: absolute;
+  top: var(--safe-area-inset-top, 0px);
+
+  [role="progressbar"] {
+    box-shadow:
+      0 0 10px var(--progress-section-color),
+      0 0 5px var(--progress-section-color);
+  }
+
+  @mixin dark-user-theme {
+    background-color: alpha(
+      light-dark(var(--mantine-color-black), var(--mantine-color-white)),
+      0.2
+    );
+  }
+}

@@ -2,6 +2,7 @@
   max-width: 440px;
   padding: 8px var(--mantine-spacing-xs);
   border-radius: var(--mantine-radius-default);
+  white-space: pre-wrap;
 
   &[data-role="user"] {
     align-self: flex-end;
@@ -23,5 +24,18 @@
 
   @mixin hover {
     border-color: var(--mantine-color-primary-outline);
+  }
+}
+
+.valuesProgressDot {
+  --dot-size: rem(8px);
+
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--mantine-radius-xl);
+  background-color: alpha(var(--mantine-color-dimmed), 0.3);
+
+  &[data-completed] {
+    background-color: var(--mantine-color-primary-light-color);
   }
 }

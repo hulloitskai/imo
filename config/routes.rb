@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # == Quests
+  resources :quests, only: %i[show create], export: true
+
   # == Contact
   resource :contact_url, only: :show, export: { namespace: "contact_url" }
 

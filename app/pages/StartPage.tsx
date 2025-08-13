@@ -1,5 +1,6 @@
 import {
   Accordion,
+  type ButtonProps,
   List,
   Radio,
   Skeleton,
@@ -10,6 +11,7 @@ import {
 
 import AppLayout from "~/components/AppLayout";
 import { useOpenAI } from "~/helpers/openai";
+import { type Quest } from "~/types";
 
 import classes from "./StartPage.module.css";
 
@@ -28,11 +30,22 @@ const StartPage: PageComponent<StartPageProps> = () => {
     Record<string, string> | undefined
   >();
   return exploreMessages === undefined ? (
-    <ExploreComponent onCompleted={setExploreMessages} />
+    <ExploreComponent
+      onCompleted={messages => {
+        setExploreMessages(messages);
+        scrollTo({ top: 0 });
+      }}
+    />
   ) : valuesChoices === undefined ? (
-    <ValuesComponent {...{ exploreMessages }} onCompleted={setValuesChoices} />
+    <ValuesComponent
+      {...{ exploreMessages }}
+      onCompleted={valuesChoices => {
+        setValuesChoices(valuesChoices);
+        scrollTo({ top: 0 });
+      }}
+    />
   ) : (
-    <ChallengeComponent {...{ exploreMessages, valuesChoices }} />
+    <QuestComponent {...{ exploreMessages, valuesChoices }} />
   );
 };
 
@@ -103,7 +116,7 @@ const ExploreComponent: FC<ExploreComponentProps> = ({ onCompleted }) => {
             {content}
           </Text>
         ))}
-        <Transition transition="pop" mounted={messages.length > 5}>
+        <Transition transition="pop" mounted={messages.length > 3}>
           {style => (
             <Button
               leftSection={<ContinueIcon />}
@@ -239,23 +252,31 @@ const ValuesComponent: FC<ValuesComponentProps> = ({
       ) : (
         <Skeleton h={340} />
       )}
+      <Group gap={10} justify="center" mt="xl">
+        {questions.map((_, i) => (
+          <Box
+            className={classes.valuesProgressDot}
+            mod={{ completed: i <= questionIndex }}
+          />
+        ))}
+      </Group>
     </Stack>
   );
 };
 
 interface Challenge {
   reasoning: string;
-  challenge_goal: string[];
+  challenge_goal: string;
   short_description: string;
   recommended_steps: string[];
 }
 
-interface ChallengeComponentProps {
+interface QuestComponentProps {
   exploreMessages: ChatMessage[];
   valuesChoices: Record<string, string>;
 }
 
-const ChallengeComponent: FC<ChallengeComponentProps> = ({
+const QuestComponent: FC<QuestComponentProps> = ({
   exploreMessages,
   valuesChoices,
 }) => {
@@ -284,12 +305,32 @@ const ChallengeComponent: FC<ChallengeComponentProps> = ({
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // == Create quest
+  const { trigger: triggerCreate, mutating: creatingQuest } = useRouteMutation<{
+    quest: Quest;
+    ownershipToken: string;
+  }>(routes.quests.create, {
+    descriptor: "create quest",
+    serializeData: quest => ({ quest }),
+    onSuccess: ({ quest, ownershipToken }) => {
+      const questPath = routes.quests.show.path({
+        id: quest.id,
+        query: {
+          ownership_token: ownershipToken,
+        },
+      });
+      router.visit(questPath);
+    },
+  });
+  const [selectedChallengeIndex, setSelectedChallengeIndex] =
+    useState<number>();
+
   return (
     <Stack gap="sm">
       <Title size="h2" lh={1.3}>
         {challenges
-          ? "Here are your recommended challenges"
-          : "Generating recommended challenges..."}
+          ? "Here are your recommended quests"
+          : "Generating recommended quests..."}
       </Title>
       {challenges ? (
         <Accordion variant="separated" defaultValue={null}>
@@ -302,19 +343,34 @@ const ChallengeComponent: FC<ChallengeComponentProps> = ({
                 {challenge.challenge_goal}
               </Accordion.Control>
               <Accordion.Panel>
-                <Stack gap="sm">
-                  <Text>{challenge.short_description}</Text>
-                  <div>
-                    <Text ff="heading" fw={600} mb="xs">
-                      Recommended steps:
-                    </Text>
-                    <List type="ordered">
-                      {challenge.recommended_steps.map((step, j) => (
-                        <List.Item key={j}>{step}</List.Item>
-                      ))}
-                    </List>
-                  </div>
-                </Stack>
+                <QuestAccordionPanelContent
+                  {...{ challenge }}
+                  buttonProps={{
+                    disabled: creatingQuest && selectedChallengeIndex !== i,
+                    loading: creatingQuest && selectedChallengeIndex === i,
+                    onClick: () => {
+                      setSelectedChallengeIndex(i);
+                      const today = DateTime.local();
+                      const deadline = today.plus({ weeks: 1 }).set({
+                        hour: 20,
+                        minute: 0,
+                        second: 0,
+                        millisecond: 0,
+                      });
+                      void triggerCreate({
+                        name: challenge.challenge_goal,
+                        description: challenge.short_description,
+                        deadline: deadline.toISO(),
+                        milestones_attributes: challenge.recommended_steps.map(
+                          (step, j) => ({
+                            number: j + 1,
+                            description: step,
+                          }),
+                        ),
+                      });
+                    },
+                  }}
+                />
               </Accordion.Panel>
             </Accordion.Item>
           ))}
@@ -322,6 +378,33 @@ const ChallengeComponent: FC<ChallengeComponentProps> = ({
       ) : (
         <Skeleton h={340} />
       )}
+    </Stack>
+  );
+};
+
+interface QuestAccordionPanelContentProps {
+  challenge: Challenge;
+  buttonProps: ButtonProps & ComponentPropsWithoutRef<"button">;
+}
+
+const QuestAccordionPanelContent: FC<QuestAccordionPanelContentProps> = ({
+  challenge,
+  buttonProps,
+}) => {
+  return (
+    <Stack gap="sm">
+      <Text>{challenge.short_description}</Text>
+      <Text ff="heading" fw={600} mb="xs">
+        Recommended steps:
+      </Text>
+      <List type="ordered">
+        {challenge.recommended_steps.map((step, j) => (
+          <List.Item key={j}>{step}</List.Item>
+        ))}
+      </List>
+      <Button leftSection={<SuccessIcon />} {...buttonProps}>
+        Select this quest
+      </Button>
     </Stack>
   );
 };

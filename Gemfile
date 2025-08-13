@@ -119,9 +119,6 @@ gem "after_party", "~> 1.11"
 # Handle CORS requests
 gem "rack-cors", "~> 2.0"
 
-# Cache counts in models with CounterCulture
-gem "counter_culture", "~> 3.5"
-
 # Serialize JSON with MultiJSON
 gem "multi_json", "~> 1.15"
 
@@ -140,14 +137,8 @@ gem "pagy", "~> 9.2"
 # Up-to-date Emoji Regex
 gem "unicode-emoji", "~> 3.7", require: "unicode/emoji"
 
-# Verify JWTs
-gem "jwt", "~> 2.9"
-
 # Parse HTML with Nokogiri
 gem "nokogiri", "~> 1.15"
-
-# Generate fake data
-gem "faker", "~> 3.5"
 
 # Use OpenAI gem
 gem "openai", "~> 0.17.0"

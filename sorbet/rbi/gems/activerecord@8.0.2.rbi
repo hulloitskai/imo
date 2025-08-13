@@ -8274,8 +8274,6 @@ class ActiveRecord::Base
   include ::ActiveRecord::Marshalling::Methods
   include ::FriendlyId::UnfriendlyUtils
   include ::ActiveStorageValidations
-  include ::CounterCulture::Extensions
-  include ::CounterCulture::SkipUpdates
   include ::GlobalID::Identification
   extend ::ActiveModel::Validations::ClassMethods
   extend ::ActiveModel::Naming
@@ -8336,7 +8334,6 @@ class ActiveRecord::Base
   extend ::ActiveRecord::SignedId::ClassMethods
   extend ::ActiveRecord::Suppressor::ClassMethods
   extend ::ActiveRecord::Normalization::ClassMethods
-  extend ::CounterCulture::Extensions::ClassMethods
 
   # source://activesupport/8.0.2/lib/active_support/callbacks.rb#69
   def __callbacks; end
@@ -15026,7 +15023,7 @@ class ActiveRecord::ConnectionAdapters::PostgreSQL::OID::DateTime < ::ActiveReco
 
   protected
 
-  # source://activerecord-postgis-adapter/10.0.1-32d58f3d3df94779acabba3a2e510de56a2bce63/lib/active_record/connection_adapters/postgis/oid/date_time.rb#11
+  # source://activerecord//lib/active_record/connection_adapters/postgresql/oid/date_time.rb#29
   def real_type_unless_aliased(real_type); end
 end
 
@@ -29589,19 +29586,19 @@ ActiveRecord::Migration::Compatibility::V8_0 = ActiveRecord::Migration::Current
 # source://activerecord//lib/active_record/migration.rb#579
 class ActiveRecord::Migration::Current < ::ActiveRecord::Migration
   # source://activerecord//lib/active_record/migration.rb#588
-  # def change_table(table_name, **options); end
+  def change_table(table_name, **options); end
 
   # source://activerecord//lib/active_record/migration.rb#612
   def compatible_table_definition(t); end
 
   # source://activerecord//lib/active_record/migration.rb#596
-  # def create_join_table(table_1, table_2, **options); end
+  def create_join_table(table_1, table_2, **options); end
 
   # source://activerecord//lib/active_record/migration.rb#580
-  # def create_table(table_name, **options); end
+  def create_table(table_name, **options); end
 
   # source://activerecord//lib/active_record/migration.rb#604
-  # def drop_table(*table_names, **options); end
+  def drop_table(*table_names, **options); end
 end
 
 # The default strategy for executing migrations. Delegates method calls
@@ -41257,8 +41254,6 @@ end
 #
 # source://activerecord//lib/active_record/type/internal/timezone.rb#4
 module ActiveRecord::Type
-  extend ::ActiveRecord::ConnectionAdapters::PostGIS::Type
-
   class << self
     # source://activerecord//lib/active_record/type.rb#49
     def adapter_name_from(model); end
@@ -41269,7 +41264,7 @@ module ActiveRecord::Type
     # source://activerecord//lib/active_record/type.rb#45
     def default_value; end
 
-    # source://activerecord-postgis-adapter/10.0.1-32d58f3d3df94779acabba3a2e510de56a2bce63/lib/active_record/connection_adapters/postgis/type.rb#9
+    # source://activerecord//lib/active_record/type.rb#41
     def lookup(*args, adapter: T.unsafe(nil), **kwargs); end
 
     # Add a new type to the registry, allowing it to be referenced as a
@@ -42198,8 +42193,8 @@ class ActiveRecord::Validations::UniquenessValidator < ::ActiveModel::EachValida
   # source://activerecord//lib/active_record/validations/uniqueness.rb#6
   def initialize(options); end
 
-  # source://enumerize/2.8.1/lib/enumerize/hooks/uniqueness.rb#9
-  def validate_each(record, name, value); end
+  # source://activerecord//lib/active_record/validations/uniqueness.rb#20
+  def validate_each(record, attribute, value); end
 
   private
 
@@ -42254,9 +42249,6 @@ module Arel
 
     # source://activerecord//lib/arel.rb#68
     def fetch_attribute(value, &block); end
-
-    # source://rgeo-activerecord/8.0.0/lib/rgeo/active_record/spatial_expressions.rb#253
-    def spatial(arg); end
 
     # Wrap a known-safe SQL string for passing to query methods, e.g.
     #
@@ -45559,12 +45551,6 @@ class Arel::Visitors::Dot < ::Arel::Visitors::Visitor
   # source://activerecord//lib/arel/visitors/dot.rb#197
   def visit_NilClass(o); end
 
-  # source://activerecord//lib/arel/visitors/dot.rb#197
-  def visit_RGeo_Cartesian_BoundingBox(o); end
-
-  # source://activerecord//lib/arel/visitors/dot.rb#197
-  def visit_RGeo_Feature_Instance(o); end
-
   # source://activerecord//lib/arel/visitors/dot.rb#226
   def visit_Set(o); end
 
@@ -46288,9 +46274,6 @@ class Arel::Visitors::Visitor
 
   # source://activerecord//lib/arel/visitors/visitor.rb#10
   def accept(object, collector = T.unsafe(nil)); end
-
-  # source://rgeo-activerecord/8.0.0/lib/rgeo/active_record/arel_spatial_queries.rb#79
-  def visit_RGeo_ActiveRecord_SpatialConstantNode(node, collector); end
 
   private
 

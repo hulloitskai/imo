@@ -49,6 +49,13 @@ Rails.application.routes.draw do
     status: 302,
   )
 
+  # == OpenAI
+  resource :openai, controller: "openai", only: [], export: true do
+    post :explore_chat
+    post :generate_values_questions
+    post :generate_challenges
+  end
+
   # == Devtools
   if Rails.env.development?
     resource(

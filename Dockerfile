@@ -8,7 +8,7 @@ FROM debian:bookworm-slim AS system
 ENV OVERMIND_VERSION=2.5.1
 ENV STARSHIP_VERSION=1.20.1
 ENV DEVTOOLS="vim less"
-ENV LIBRARIES="libvips"
+ENV LIBRARIES=""
 
 # Configure workdir
 WORKDIR /app

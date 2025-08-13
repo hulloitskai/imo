@@ -78,14 +78,3 @@ jobs:
         env:
           RAILS_ENV: production
           SECRET_KEY_BASE_DUMMY: "1"
-      - name: Create Sentry release
-        uses: getsentry/action-release@v3
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: imo
-        with:
-          environment: production
-          projects: imo
-          ignore_missing: true
-          disable_telemetry: true
-          sourcemaps: ./public/dist

@@ -15,16 +15,8 @@ gem "pg", "~> 1.5"
 # Perform full text search with Postgres
 gem "pg_search", "~> 2.3"
 
-# Use RGeo geometry types
-gem "rgeo", "~> 3.0"
-gem "rgeo-geojson", "~> 2.2"
-gem "rgeo-activerecord", "~> 8.0"
-
 # Enable additional operators and utilities for Active Record with PostgreSQL
 gem "active_record_extended", github: "GeorgeKaraszi/ActiveRecordExtended", branch: "feature/rails80"
-
-# Use PostGIS extensions for PostgreSQL
-gem "activerecord-postgis-adapter", github: "rgeo/activerecord-postgis-adapter", ref: "32d58f3d3df94779acabba3a2e510de56a2bce63"
 
 # Use enhanced PostgreSQL adapter for Action Cable
 gem "actioncable-enhanced-postgresql-adapter", "~> 1.0"
@@ -49,7 +41,6 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.12"
-gem "ruby-vips", "~> 2.1", require: false
 
 # Use S3 as the backend for Active Storage
 gem "aws-sdk-s3", "~> 1.126", require: false
@@ -158,6 +149,9 @@ gem "nokogiri", "~> 1.15"
 # Generate fake data
 gem "faker", "~> 3.5"
 
+# Use OpenAI gem
+gem "openai", "~> 0.17.0"
+
 group :development, :test do
   # Debug code with debug
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -226,4 +220,3 @@ group :test do
   gem "capybara-playwright-driver"
   gem "rack-test"
 end
-

@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 
 import AppLayout from "~/components/AppLayout";
-import { useOpenAI } from "~/helpers/openai";
 import { type Quest } from "~/types";
 
 import classes from "./StartPage.module.css";
@@ -66,14 +65,10 @@ interface ExploreComponentProps {
 }
 
 const ExploreComponent: FC<ExploreComponentProps> = ({ onCompleted }) => {
-  const openai = useOpenAI();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   const sendMessage = (content: string) => {
-    if (!openai) {
-      throw new Error("OpenAI client not ready");
-    }
     setInput("");
     setMessages(prevMessages => {
       const newMessages: ChatMessage[] = [
@@ -81,20 +76,16 @@ const ExploreComponent: FC<ExploreComponentProps> = ({ onCompleted }) => {
         { role: "user", content },
       ];
       setSending(true);
-      void openai.responses
-        .create({
-          prompt: {
-            id: "pmpt_688f7b838bc881948f44796b2a2f346c06603bd4ac233e59",
-          },
-          input: newMessages.map(({ role, content }) => ({
-            role,
-            content,
-          })),
-        })
-        .then(({ output_text }) => {
+      void fetchRoute<{ outputText: string }>(routes.openai.exploreChat, {
+        descriptor: "send message",
+        data: {
+          messages: newMessages,
+        },
+      })
+        .then(({ outputText }) => {
           setMessages(prevMessages => [
             ...prevMessages,
-            { role: "assistant", content: output_text },
+            { role: "assistant", content: outputText },
           ]);
         })
         .finally(() => {
@@ -178,31 +169,22 @@ const ValuesComponent: FC<ValuesComponentProps> = ({
   exploreMessages,
   onCompleted,
 }) => {
-  const openai = useOpenAI();
   const [questions, setQuestions] = useState<ValuesDiscoverQuestions[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const selectedChoices = useRef<Record<string, string>>({});
   const currentQuestion = questions[questionIndex];
   useEffect(() => {
-    if (!openai) {
-      throw new Error("OpenAI client not ready");
-    }
-    void openai.responses
-      .create({
-        prompt: {
-          id: "pmpt_688f87bd27408197a3a62f7afd64d60d0c216644b938783c",
+    void fetchRoute<{ valuesDiscoveryQuestions: ValuesDiscoverQuestions[] }>(
+      routes.openai.generateValuesQuestions,
+      {
+        descriptor: "generate values questions",
+        data: {
+          user_problem_interview_messages: exploreMessages,
         },
-        input: JSON.stringify({
-          userProblemInterviewMessages: exploreMessages,
-        }),
-      })
-      .then(({ output_text }) => {
-        const { valuesDiscoveryQuestions } = JSON.parse(output_text);
-        if (valuesDiscoveryQuestions) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          setQuestions(valuesDiscoveryQuestions);
-        }
-      });
+      },
+    ).then(({ valuesDiscoveryQuestions }) => {
+      setQuestions(valuesDiscoveryQuestions);
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -280,29 +262,20 @@ const QuestComponent: FC<QuestComponentProps> = ({
   exploreMessages,
   valuesChoices,
 }) => {
-  const openai = useOpenAI();
   const [challenges, setChallenges] = useState<Challenge[]>();
   useEffect(() => {
-    if (!openai) {
-      throw new Error("OpenAI client not ready");
-    }
-    void openai.responses
-      .create({
-        prompt: {
-          id: "pmpt_688f91907b2c8193babf232fa293a7bd0501849131e10741",
+    void fetchRoute<{ challenges: Challenge[] }>(
+      routes.openai.generateChallenges,
+      {
+        descriptor: "generate challenges",
+        data: {
+          user_problem_interview_messages: exploreMessages,
+          values_discovery_questions: valuesChoices,
         },
-        input: JSON.stringify({
-          userProblemInterviewMessages: exploreMessages,
-          valuesDiscoveryQuestions: valuesChoices,
-        }),
-      })
-      .then(({ output_text }) => {
-        const { challenges } = JSON.parse(output_text);
-        if (challenges) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          setChallenges(challenges);
-        }
-      });
+      },
+    ).then(({ challenges }) => {
+      setChallenges(challenges);
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // == Create quest

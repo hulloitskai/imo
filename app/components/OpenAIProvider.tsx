@@ -7,7 +7,7 @@ export interface OpenAIProviderProps extends PropsWithChildren {}
 const OpenAIProvider: FC<OpenAIProviderProps> = ({ children }) => {
   const [client, setClient] = useState<OpenAI | undefined>();
   useEffect(() => {
-    const apiKey = requireMeta("openai-api-key");
+    const apiKey = getMeta("openai-api-key");
     if (apiKey) {
       const client = new OpenAI({
         apiKey,

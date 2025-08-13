@@ -18,7 +18,7 @@ export interface QuestPageProps extends SharedPageProps {
 const QuestPage: PageComponent<QuestPageProps> = ({
   quest,
   milestones,
-  ownershipToken,
+  ownershipToken: _ownershipToken,
 }) => {
   return (
     <Stack>

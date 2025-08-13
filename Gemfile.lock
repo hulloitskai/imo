@@ -7,15 +7,6 @@ GIT
       activerecord (>= 5.2, < 8.1)
       pg (< 3.0)
 
-GIT
-  remote: https://github.com/rgeo/activerecord-postgis-adapter.git
-  revision: 32d58f3d3df94779acabba3a2e510de56a2bce63
-  ref: 32d58f3d3df94779acabba3a2e510de56a2bce63
-  specs:
-    activerecord-postgis-adapter (10.0.1)
-      activerecord (~> 8.0.0)
-      rgeo-activerecord (~> 8.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -303,6 +294,8 @@ GEM
       ostruct (>= 0.2)
     oj_serializers (2.0.3)
       oj (>= 3.14.0)
+    openai (0.17.1)
+      connection_pool
     ostruct (0.6.1)
     pagy (9.2.1)
     parallel (1.27.0)
@@ -418,13 +411,6 @@ GEM
     rerun (0.14.0)
       listen (~> 3.0)
     rexml (3.4.1)
-    rgeo (3.0.1)
-    rgeo-activerecord (8.0.0)
-      activerecord (>= 7.0)
-      rgeo (>= 3.0)
-    rgeo-geojson (2.2.0)
-      multi_json (~> 1.15)
-      rgeo (>= 1.0.0)
     rouge (4.5.1)
     rubocop (1.74.0)
       json (~> 2.3)
@@ -558,7 +544,6 @@ DEPENDENCIES
   actioncable-enhanced-postgresql-adapter (~> 1.0)
   active_record_extended!
   active_storage_validations (~> 0.9.6)
-  activerecord-postgis-adapter!
   actual_db_schema (~> 0.7.9)
   addressable (~> 2.8)
   after_party (~> 1.11)
@@ -596,6 +581,7 @@ DEPENDENCIES
   multi_json (~> 1.15)
   nokogiri (~> 1.15)
   oj_serializers (~> 2.0)
+  openai (~> 0.17.0)
   pagy (~> 9.2)
   pg (~> 1.5)
   pg_query
@@ -617,9 +603,6 @@ DEPENDENCIES
   rbs (~> 3.5.3)
   rerun (~> 0.14.0)
   rexml (>= 3.3.6)
-  rgeo (~> 3.0)
-  rgeo-activerecord (~> 8.0)
-  rgeo-geojson (~> 2.2)
   rubocop (~> 1.74)
   rubocop-capybara
   rubocop-performance
@@ -627,7 +610,6 @@ DEPENDENCIES
   rubocop-shopify
   rubocop-sorbet
   ruby-lsp
-  ruby-vips (~> 2.1)
   sentry-rails (~> 5.9)
   silencer (~> 2.0)
   sorbet

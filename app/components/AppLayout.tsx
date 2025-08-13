@@ -12,7 +12,6 @@ import {
   useResolveDynamicProp,
 } from "~/helpers/appLayout";
 import { useAutoClearColorScheme } from "~/helpers/mantine";
-import { CONFETTI_CANVAS_ID, SMOKE_CANVAS_ID } from "~/helpers/particles";
 
 import AppHeader, { type AppHeaderProps } from "./AppHeader";
 import AppMeta, { type AppMetaProps } from "./AppMeta";
@@ -143,43 +142,39 @@ const AppInner: FC<AppInnerProps> = ({
   );
 
   return (
-    <>
-      <AppShell
-        withBorder={LAYOUT_WITH_BORDER}
-        header={{ height: 46 }}
-        footer={{ height: "var(--mantine-spacing-md)" }}
-        padding={padding ?? (withContainer ? undefined : "md")}
-        classNames={{ root: classes.shell, header: classes.header }}
-        data-vaul-drawer-wrapper
-        {...otherProps}
+    <AppShell
+      withBorder={LAYOUT_WITH_BORDER}
+      header={{ height: 46 }}
+      footer={{ height: "var(--mantine-spacing-md)" }}
+      padding={padding ?? (withContainer ? undefined : "md")}
+      classNames={{ root: classes.shell, header: classes.header }}
+      data-vaul-drawer-wrapper
+      {...otherProps}
+    >
+      <AppHeader {...{ logoHref }} />
+      <AppShell.Main
+        className={classes.main}
+        {...{ pt, pb, pr, pl, py, px, p }}
       >
-        <AppHeader {...{ logoHref }} />
-        <AppShell.Main
-          className={classes.main}
-          {...{ pt, pb, pr, pl, py, px, p }}
-        >
-          {!isEmpty(breadcrumbs) && (
-            <Breadcrumbs
-              mx={10}
-              mt={6}
-              classNames={{
-                root: classes.breadcrumb,
-                separator: classes.breadcrumbSeparator,
-              }}
-            >
-              {breadcrumbs.map(({ title, href }, index) => (
-                <Anchor component={Link} href={href} key={index} size="sm">
-                  {title}
-                </Anchor>
-              ))}
-            </Breadcrumbs>
-          )}
-          {main}
-        </AppShell.Main>
-        <footer className={classes.footer} />
-      </AppShell>
-      <canvas id={SMOKE_CANVAS_ID} className={classes.particleCanvas} />
-      <canvas id={CONFETTI_CANVAS_ID} className={classes.particleCanvas} />
-    </>
+        {!isEmpty(breadcrumbs) && (
+          <Breadcrumbs
+            mx={10}
+            mt={6}
+            classNames={{
+              root: classes.breadcrumb,
+              separator: classes.breadcrumbSeparator,
+            }}
+          >
+            {breadcrumbs.map(({ title, href }, index) => (
+              <Anchor component={Link} href={href} key={index} size="sm">
+                {title}
+              </Anchor>
+            ))}
+          </Breadcrumbs>
+        )}
+        {main}
+      </AppShell.Main>
+      <footer className={classes.footer} />
+    </AppShell>
   );
 };

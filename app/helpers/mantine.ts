@@ -28,7 +28,6 @@ import {
   TypographyStylesProvider,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { RichTextEditor } from "@mantine/tiptap";
 import { type PopoverMiddlewares } from "node_modules/@mantine/core/lib/components/Popover/Popover.types";
 
 import { type Rect, useSafeViewportRect } from "./safeArea";
@@ -300,13 +299,6 @@ const createTheme = (
         classNames: {
           input: classes.input,
           label: classes.inputLabel,
-        },
-      }),
-      RichTextEditor: RichTextEditor.extend({
-        classNames: {
-          root: classes.input,
-          content: classes.richTextEditorContent,
-          control: classes.richTextEditorControl,
         },
       }),
       Chip: Chip.extend({

@@ -37,9 +37,7 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
-  # if Rails.application.credentials_available?
   config.active_storage.service = :local
-  # end
 
   # Send mail using Mailjet
   config.action_mailer.delivery_method = :mailjet_api

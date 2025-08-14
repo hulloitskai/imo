@@ -4,9 +4,9 @@
 # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
   # == Redirects
-  constraints SubdomainConstraint do
-    get "(*any)" => redirect(subdomain: "", status: 302)
-  end
+  # constraints SubdomainConstraint do
+  #   get "(*any)" => redirect(subdomain: "", status: 302)
+  # end
 
   # == Errors
   scope controller: :errors do
